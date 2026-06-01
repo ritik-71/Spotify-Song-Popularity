@@ -2,7 +2,6 @@
 import numpy as np
 import pandas as pd
 import xgboost as xgb
-from catboost import CatBoostRegressor
 import optuna
 from sklearn.model_selection import KFold
 from sklearn.metrics import mean_squared_error
@@ -62,7 +61,7 @@ def objective(trial, X, y):
         model = xgb.XGBRegressor(**params)
         model.fit(X_tr, y_tr)
         preds = model.predict(X_val)
-        scores.append(mean_squared_error(y_val, preds, squared=False))
+        scores.append(np.sqrt(mean_squared_error(y_val, preds)))
         
     return np.mean(scores)
 
